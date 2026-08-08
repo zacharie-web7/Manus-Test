@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yooza Avis — Suivi et automatisation des demandes d'avis Google clients">
+  <title>Yooza Avis</title>
+
+  <!-- Roboto via Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Favicon SVG inline (Y jaune sur fond noir) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231E1E1C'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='700' font-size='20' fill='%23FFE861'>Y</text></svg>">
+</head>
+<body>
+
+<!-- =====================================================================
+     Structure principale de l'application
+     ===================================================================== -->
+<div class="app-layout">
+
+  <!-- ===================================================================
+       Sidebar
+       =================================================================== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation principale">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-fallback">
+        <div class="sidebar-logo-mark">Y</div>
+        <div class="sidebar-logo-text">
+          <span class="sidebar-logo-name">Yooza</span>
+          <span class="sidebar-logo-sub">Avis clients</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Principal</div>
+
+      <button class="nav-item" data-route="/dashboard" onclick="navigate('#/dashboard')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+        Tableau de bord
+      </button>
+
+      <button class="nav-item" data-route="/clients" onclick="navigate('#/clients')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Clients
+      </button>
+
+      <div class="nav-section-label">Configuration</div>
+
+      <button class="nav-item" data-route="/settings" onclick="navigate('#/settings')">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Réglages
+      </button>
+    </nav>
+
+    <!-- Footer sidebar -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-badge">
+        <div class="version">V1.0</div>
+        <div class="version-label">Démo locale</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- Overlay sidebar mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- ===================================================================
+       Contenu principal
+       =================================================================== -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar" role="banner">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="openSidebar()" aria-label="Ouvrir le menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <h1 class="page-title" id="page-title">Tableau de bord</h1>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-date" id="topbar-date"></span>
+        <div class="topbar-avatar" title="Yooza SC">Y</div>
+      </div>
+    </header>
+
+    <!-- Zone de contenu dynamique -->
+    <main class="page-content" id="page-content" role="main">
+      <!-- Rendu par le routeur JS -->
+    </main>
+
+  </div>
+
+</div>
+
+<!-- =====================================================================
+     Modal générique
+     ===================================================================== -->
+<div class="modal-overlay hidden" id="modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title"></h2>
+      <button class="modal-close" onclick="closeModal()" aria-label="Fermer">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<!-- =====================================================================
+     Toast container
+     ===================================================================== -->
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- =====================================================================
+     Scripts — ordre de chargement important
+     ===================================================================== -->
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/clients.js"></script>
+<script src="js/client-detail.js"></script>
+<script src="js/settings.js"></script>
+
+<script>
+  // Fermer la modal en cliquant sur l'overlay
+  function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) {
+      closeModal();
+    }
+  }
+
+  // Tous les scripts sont chargés de manière synchrone.
+  // initApp() initialise l'état et déclenche le premier rendu.
+  initApp();
+</script>
+
+</body>
+</html>
