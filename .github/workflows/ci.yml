@@ -48,3 +48,79 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  postgresql:
+    name: PostgreSQL 17 migration and constraints
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: yooza_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d yooza_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: yooza_test
+      PGUSER: postgres
+      PGPASSWORD: postgres
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Ensure PostgreSQL client is available
+        shell: bash
+        run: |
+          if ! command -v psql >/dev/null 2>&1 || ! command -v pg_isready >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --yes postgresql-client
+          fi
+          command -v psql
+          command -v pg_isready
+          psql --version
+
+      - name: Wait for PostgreSQL and confirm connection
+        shell: bash
+        run: |
+          for attempt in {1..30}; do
+            if pg_isready; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              echo "PostgreSQL did not become ready in time" >&2
+              exit 1
+            fi
+            sleep 1
+          done
+          psql --no-psqlrc --set ON_ERROR_STOP=on --command "SELECT current_database(), current_user, version();"
+
+      - name: Apply all migrations from an empty database
+        shell: bash
+        run: |
+          shopt -s nullglob
+          migrations=(drizzle/*.sql)
+          if [ "${#migrations[@]}" -eq 0 ]; then
+            echo "No SQL migration found in drizzle/" >&2
+            exit 1
+          fi
+          for migration in "${migrations[@]}"; do
+            echo "Applying ${migration}"
+            psql --no-psqlrc --set ON_ERROR_STOP=on --file "$migration"
+          done
+
+      - name: Test PostgreSQL constraints
+        run: psql --no-psqlrc --set ON_ERROR_STOP=on --file tests/postgres-model.sql
