@@ -150,10 +150,63 @@ function updateTopbarDate() {
 }
 
 // ---------------------------------------------------------------------------
+// PWA — cache hors connexion et installation
+// ---------------------------------------------------------------------------
+var deferredInstallPrompt = null;
+
+function showInstallButton() {
+  var button = document.getElementById('install-app-button');
+  if (button) button.classList.remove('is-hidden');
+}
+
+function hideInstallButton() {
+  var button = document.getElementById('install-app-button');
+  if (button) button.classList.add('is-hidden');
+}
+
+function initPwa() {
+  // Le service worker est disponible en HTTPS et lors des tests localhost.
+  if ('serviceWorker' in navigator && (window.isSecureContext || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('./service-worker.js').catch(function(error) {
+      console.warn('Service worker Yooza Avis non enregistré :', error);
+    });
+  }
+
+  // Chrome, Edge et la plupart des navigateurs Android exposent cet événement.
+  window.addEventListener('beforeinstallprompt', function(event) {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    showInstallButton();
+  });
+
+  window.addEventListener('appinstalled', function() {
+    deferredInstallPrompt = null;
+    hideInstallButton();
+    showToast('Yooza Avis est installé sur cet appareil.', 'success');
+  });
+}
+
+function installYoozaApp() {
+  if (!deferredInstallPrompt) {
+    showToast('Sur iPhone, ouvrez Partager puis « Sur l’écran d’accueil ».', 'default', 5000);
+    return;
+  }
+
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(function(choice) {
+    if (choice.outcome === 'accepted') {
+      hideInstallButton();
+    }
+    deferredInstallPrompt = null;
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Initialisation au chargement
 // ---------------------------------------------------------------------------
 function initApp() {
   initAppState();
   updateTopbarDate();
+  initPwa();
   handleRoute();
 }

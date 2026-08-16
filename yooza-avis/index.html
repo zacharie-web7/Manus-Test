@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Yooza Avis — Suivi et automatisation des demandes d'avis Google clients">
+  <meta name="theme-color" content="#1E1E1C">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Yooza Avis">
   <title>Yooza Avis</title>
+
+  <!-- Installation PWA et icônes officielles Yooza -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png">
 
   <!-- Roboto via Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,8 +25,6 @@
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Favicon SVG inline (Y jaune sur fond noir) -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231E1E1C'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='700' font-size='20' fill='%23FFE861'>Y</text></svg>">
 </head>
 <body>
 
@@ -31,13 +40,8 @@
 
     <!-- Logo -->
     <div class="sidebar-logo">
-      <div class="sidebar-logo-fallback">
-        <div class="sidebar-logo-mark">Y</div>
-        <div class="sidebar-logo-text">
-          <span class="sidebar-logo-name">Yooza</span>
-          <span class="sidebar-logo-sub">Avis clients</span>
-        </div>
-      </div>
+      <img src="assets/yooza-logo-sidebar.png" alt="Yooza — Réfrigération et climatisation" class="sidebar-logo-image">
+      <span class="sidebar-app-label">Avis clients</span>
     </div>
 
     <!-- Navigation -->
@@ -107,6 +111,9 @@
       </div>
       <div class="topbar-right">
         <span class="topbar-date" id="topbar-date"></span>
+        <button class="install-app-button is-hidden" id="install-app-button" type="button" onclick="installYoozaApp()" aria-label="Installer Yooza Avis">
+          <span aria-hidden="true">↓</span> Installer l’app
+        </button>
         <div class="topbar-avatar" title="Yooza SC">Y</div>
       </div>
     </header>

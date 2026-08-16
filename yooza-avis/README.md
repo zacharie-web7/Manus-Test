@@ -30,6 +30,8 @@ start index.html         # Windows
 ```
 
 > Aucune installation requise. L'application fonctionne entièrement en local.
+>
+> Pour tester l’installation PWA et le fonctionnement hors connexion, utiliser toutefois un serveur local ou GitHub Pages : les navigateurs n’activent pas le service worker depuis un fichier ouvert directement (`file://`).
 
 ### Méthode 2 — Serveur local (recommandé pour éviter les restrictions CORS)
 
@@ -51,23 +53,55 @@ Installer l'extension **Live Server**, clic droit sur `index.html` → *Open wit
 
 ---
 
+## Application mobile installable (PWA)
+
+Yooza Avis est une **Progressive Web App**. Elle s’ouvre dans une fenêtre dédiée, possède son icône officielle Yooza et conserve l’application disponible lorsque la connexion est limitée.
+
+### Installer sur Android
+
+1. Ouvrir l’application dans **Chrome**.
+2. Appuyer sur **Installer l’app** lorsqu’il est proposé, ou ouvrir le menu Chrome.
+3. Choisir **Installer l’application** / **Ajouter à l’écran d’accueil**.
+
+### Installer sur iPhone / iPad
+
+1. Ouvrir l’application dans **Safari**.
+2. Toucher le bouton **Partager**.
+3. Sélectionner **Sur l’écran d’accueil**, puis confirmer **Ajouter**.
+
+### Publication GitHub Pages
+
+Le workflow `.github/workflows/deploy-yooza-avis-pages.yml` déploie automatiquement le dossier `yooza-avis/` à chaque mise à jour de la branche `main`.
+
+URL attendue : [https://zacharie-web7.github.io/Manus-Test/](https://zacharie-web7.github.io/Manus-Test/)
+
+> La première publication GitHub Pages peut demander quelques minutes après le premier push. La connexion HTTPS est indispensable au fonctionnement du cache hors connexion et à l’installation PWA.
+
+---
+
 ## Structure des fichiers
 
 ```
 yooza-avis/
-├── index.html                 # Point d'entrée SPA — structure HTML, sidebar, topbar, modal
+├── index.html                 # Point d’entrée SPA + métadonnées PWA
+├── manifest.webmanifest       # Nom, couleurs, icônes et raccourcis de l’application installable
+├── service-worker.js          # Cache de repli pour l’utilisation hors connexion
 ├── css/
-│   └── style.css              # Styles globaux — variables Yooza, composants, responsive
+│   └── style.css              # Styles globaux — identité Yooza et responsive mobile
 ├── js/
 │   ├── data.js                # Données de démonstration + fonctions utilitaires
-│   ├── app.js                 # Routeur SPA hash-based + état global + toast + modal
+│   ├── app.js                 # Routeur, état local, installation PWA et service worker
 │   ├── dashboard.js           # Tableau de bord (KPIs, activité récente, envois rapides)
 │   ├── clients.js             # Liste clients (filtres, recherche, export CSV)
 │   ├── client-detail.js       # Fiche client (timeline, bouton envoi, marquer avis reçu)
 │   └── settings.js            # Page réglages (lien Google, délai, canal, modèle message)
 ├── assets/
-│   ├── yooza-logo.png         # Logo Yooza (téléchargé depuis yooza.be)
-│   └── brand-identity.md      # Documentation de l'identité visuelle extraite
+│   ├── yooza-logo-*.png       # Logos officiels Yooza fournis par le client
+│   ├── yooza-logo-sidebar.png # Mot-symbole officiel pour la navigation anthracite
+│   ├── icons/                 # Icônes PWA Android, iOS et navigateur
+│   └── pwa-assets.md          # Documentation des exports d’icônes
+├── scripts/
+│   └── build_pwa_assets.py    # Génération reproductible des icons depuis le logo officiel
 └── README.md                  # Ce fichier
 ```
 
@@ -92,6 +126,10 @@ yooza-avis/
 | Persistance des données (localStorage) | ✅ |
 | Interface responsive (mobile + desktop) | ✅ |
 | Identité visuelle Yooza (jaune/noir/crème) | ✅ |
+| Logo officiel Yooza intégré | ✅ |
+| Installation PWA (Android / iOS) | ✅ |
+| Fonctionnement hors connexion (cache de repli) | ✅ |
+| Publication continue GitHub Pages | ✅ |
 
 ---
 

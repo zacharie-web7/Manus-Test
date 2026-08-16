@@ -1,0 +1,49 @@
+{
+  "id": "./",
+  "name": "Yooza Avis — Avis clients",
+  "short_name": "Yooza Avis",
+  "description": "L’outil Yooza pour préparer et suivre les demandes d’avis Google après les interventions clients.",
+  "lang": "fr-BE",
+  "dir": "ltr",
+  "start_url": "./#/dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1E1E1C",
+  "theme_color": "#1E1E1C",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tableau de bord",
+      "short_name": "Tableau de bord",
+      "url": "./#/dashboard",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Clients",
+      "short_name": "Clients",
+      "url": "./#/clients",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
