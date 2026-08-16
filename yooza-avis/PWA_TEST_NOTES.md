@@ -25,3 +25,5 @@ Le 16 août 2026, Yooza Avis a été déployé avec succès sur GitHub Pages à 
 Le tableau de bord s’affiche en HTTPS avec le logo officiel Yooza, la navigation latérale, les indicateurs de suivi et le bouton d’installation PWA. La source GitHub Pages a été configurée sur **GitHub Actions**.
 
 Le contrôle visuel public confirme que l’interface charge avec les couleurs Yooza, le logo officiel, le tableau de bord complet et le bouton « Installer l’app ».
+
+Le contrôle final de disponibilité confirme également la présence du bouton « Installer l’app » sur l’URL HTTPS publiée.
