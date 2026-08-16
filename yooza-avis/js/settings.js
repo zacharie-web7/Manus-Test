@@ -19,7 +19,7 @@ function renderSettings(container) {
       </p>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start">
+    <div class="settings-layout">
 
       <!-- Formulaire principal -->
       <div>
@@ -129,7 +129,7 @@ function renderSettings(container) {
       </div>
 
       <!-- Panneau latéral : prévisualisation -->
-      <div style="position:sticky;top:80px">
+      <div class="settings-preview">
         <div class="card">
           <div class="card-header">
             <div class="card-title">Aperçu du message</div>

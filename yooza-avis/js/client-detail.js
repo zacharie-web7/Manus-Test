@@ -110,7 +110,7 @@ function renderClientDetail(container, clientId) {
     </div>
 
     <!-- Informations en deux colonnes -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+    <div class="client-detail-grid" style="margin-bottom:1.5rem">
 
       <!-- Informations client -->
       <div class="card">
@@ -184,7 +184,7 @@ function renderClientDetail(container, clientId) {
     </div>
 
     <!-- Notes et message -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+    <div class="client-detail-grid">
 
       <!-- Notes internes -->
       <div class="card">

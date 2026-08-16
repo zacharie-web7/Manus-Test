@@ -51,7 +51,7 @@ function renderDashboard(container) {
     </div>
 
     <!-- Contenu principal en deux colonnes -->
-    <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start">
+    <div class="dashboard-main-grid">
 
       <!-- Activité récente -->
       <div class="card">
