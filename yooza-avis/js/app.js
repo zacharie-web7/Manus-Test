@@ -15,11 +15,54 @@ var AppState = {
 };
 
 function initAppState() {
-  AppState.settings = JSON.parse(localStorage.getItem('yooza_settings') || 'null') || copyObj(DEFAULT_SETTINGS);
-  AppState.clients  = JSON.parse(localStorage.getItem('yooza_clients')  || 'null') || DEMO_CLIENTS.map(copyObj);
+  AppState.settings = readStoredJson(
+    'yooza_settings',
+    DEFAULT_SETTINGS,
+    function(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
+  );
+  AppState.clients = readStoredJson(
+    'yooza_clients',
+    DEMO_CLIENTS,
+    Array.isArray
+  );
 }
 
 function copyObj(o) { return JSON.parse(JSON.stringify(o)); }
+
+function readStoredJson(key, fallback, isValid) {
+  var rawValue;
+
+  try {
+    rawValue = localStorage.getItem(key);
+    if (rawValue === null) return copyObj(fallback);
+
+    var parsedValue = JSON.parse(rawValue);
+    if (!isValid(parsedValue)) throw new TypeError('Structure de données invalide');
+    return parsedValue;
+  } catch (error) {
+    console.warn('État local Yooza ignoré pour ' + key + ' :', error);
+    try { localStorage.removeItem(key); } catch (storageError) {
+      console.warn('Impossible de supprimer la valeur locale invalide ' + key + ' :', storageError);
+    }
+    return copyObj(fallback);
+  }
+}
+
+// Les écrans V1 utilisent encore des gabarits HTML. Toute donnée variable doit
+// passer par cet échappement avant d'être injectée dans un de ces gabarits.
+function escapeHtml(value) {
+  return String(value === null || value === undefined ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function safeClientId(value) {
+  var id = Number(value);
+  return Number.isSafeInteger(id) && id >= 0 ? String(id) : '0';
+}
 
 function saveClients()  { localStorage.setItem('yooza_clients',  JSON.stringify(AppState.clients));  }
 function saveSettings() { localStorage.setItem('yooza_settings', JSON.stringify(AppState.settings)); }
@@ -110,7 +153,12 @@ function showToast(message, type, duration) {
   var toast = document.createElement('div');
   toast.className = 'toast ' + type;
   var icons = { success: '✓', error: '✕', default: 'ℹ' };
-  toast.innerHTML = '<span style="font-weight:700;font-size:1rem">' + (icons[type] || icons.default) + '</span> ' + message;
+  var icon = document.createElement('span');
+  icon.style.fontWeight = '700';
+  icon.style.fontSize = '1rem';
+  icon.textContent = icons[type] || icons.default;
+  toast.appendChild(icon);
+  toast.appendChild(document.createTextNode(' ' + String(message)));
   container.appendChild(toast);
   setTimeout(function() {
     toast.style.opacity = '0';

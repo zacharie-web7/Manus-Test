@@ -39,7 +39,7 @@ function renderSettings(container) {
                 type="url"
                 class="form-control"
                 id="lien-google"
-                value="${s.lienGoogleAvis}"
+                value="${escapeHtml(s.lienGoogleAvis)}"
                 placeholder="https://g.page/r/VOTRE_CODE/review"
               >
               <div class="form-hint">
@@ -54,7 +54,7 @@ function renderSettings(container) {
                 type="number"
                 class="form-control"
                 id="delai-envoi"
-                value="${s.delaiEnvoi}"
+                value="${escapeHtml(s.delaiEnvoi)}"
                 min="0"
                 max="30"
                 style="max-width:160px"
@@ -111,7 +111,7 @@ function renderSettings(container) {
                 id="modele-message"
                 rows="10"
                 style="min-height:200px;font-family:var(--font-body)"
-              >${s.modeleMessage}</textarea>
+              >${escapeHtml(s.modeleMessage)}</textarea>
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ function renderSettings(container) {
               Exemple avec un client fictif
             </div>
             <div class="message-preview" id="message-preview-live">
-              ${generatePreview(s)}
+              ${escapeHtml(generatePreview(s))}
             </div>
           </div>
         </div>
