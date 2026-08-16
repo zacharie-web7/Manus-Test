@@ -1,0 +1,27 @@
+{
+  "name": "yooza-avis",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Yooza Avis V1 frontend and V2 backend foundation",
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch server/src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node --env-file-if-exists=.env dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test:v1": "node --test \"tests/*.test.cjs\"",
+    "test:backend": "node --test tests/backend.test.mjs",
+    "test": "npm run test:v1 && npm run test:backend"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.1",
+    "typescript": "^7.0.2"
+  }
+}
