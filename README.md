@@ -58,7 +58,10 @@ npm start
 - `npm start` : exécute le backend compilé.
 - `npm run typecheck` : vérifie les types sans produire de fichiers.
 - `npm run test:v1` : exécute les 29 tests de non-régression de la V1.
-- `npm run test:backend` : teste `/health` et la réponse 404 sur un serveur HTTP local éphémère.
+- `npm run test:backend` : teste le backend HTTP et la structure du modèle PostgreSQL.
+- `npm run test:model` : vérifie la structure Drizzle et sa correspondance avec la migration initiale.
+- `npm run db:generate` : génère les migrations PostgreSQL sans ouvrir de connexion.
+- `npm run db:check` : vérifie la cohérence des migrations Drizzle.
 - `npm test` : exécute les tests V1 puis les tests backend.
 
 ## Intégration continue
@@ -87,10 +90,11 @@ Un serveur local est recommandé : l'ouverture directe de `index.html` ne permet
 - une réponse JSON générique `500`, sans stack trace envoyée au client ;
 - une configuration stricte et minimale de `PORT` ;
 - des tests HTTP automatisés sans base de données.
+- un modèle PostgreSQL Drizzle et une migration initiale non encore appliquée à un moteur réel.
 
 ## Ce qui n'existe volontairement pas encore
 
-- aucune base PostgreSQL ni migration ;
+- aucune base PostgreSQL connectée et aucune migration appliquée à un moteur réel ;
 - aucune authentification ;
 - aucun code ou OAuth Teamleader ;
 - aucune connexion Google Business Profile ;
@@ -100,6 +104,7 @@ Un serveur local est recommandé : l'ouverture directe de `index.html` ne permet
 
 ## Documentation V1
 
+- [Modèle de données V2](docs/data-model.md)
 - [Baseline fonctionnel V1](docs/v1-baseline.md)
 - [Documentation détaillée de la V1](yooza-avis/README.md)
 - [Notes de validation PWA](yooza-avis/PWA_TEST_NOTES.md)
