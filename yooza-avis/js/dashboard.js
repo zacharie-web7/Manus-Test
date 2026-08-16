@@ -51,7 +51,7 @@ function renderDashboard(container) {
     </div>
 
     <!-- Contenu principal en deux colonnes -->
-    <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start">
+    <div class="dashboard-main-grid">
 
       <!-- Activité récente -->
       <div class="card">
@@ -77,20 +77,20 @@ function renderDashboard(container) {
             </thead>
             <tbody>
               ${recents.map(c => `
-                <tr onclick="navigate('#/client/${c.id}')">
+                <tr onclick="navigate('#/client/${safeClientId(c.id)}')">
                   <td>
-                    <div class="client-name">${c.nom}</div>
-                    <div class="client-company">${c.entreprise}</div>
+                    <div class="client-name">${escapeHtml(c.nom)}</div>
+                    <div class="client-company">${escapeHtml(c.entreprise)}</div>
                   </td>
-                  <td class="text-sm text-muted">${c.typeIntervention}</td>
-                  <td class="text-sm text-muted">${formatDate(c.dateFinIntervention)}</td>
+                  <td class="text-sm text-muted">${escapeHtml(c.typeIntervention)}</td>
+                  <td class="text-sm text-muted">${escapeHtml(formatDate(c.dateFinIntervention))}</td>
                   <td>
                     <span class="badge ${STATUS_BADGE_CLASS[c.statut]}">
-                      ${STATUS_LABELS[c.statut]}
+                      ${escapeHtml(STATUS_LABELS[c.statut])}
                     </span>
                   </td>
                   <td>
-                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();navigate('#/client/${c.id}')">
+                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();navigate('#/client/${safeClientId(c.id)}')">
                       →
                     </button>
                   </td>
@@ -122,14 +122,14 @@ function renderDashboard(container) {
             ` : aEnvoyer.map(c => `
               <div style="display:flex;align-items:center;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid var(--yooza-border)">
                 <div style="width:36px;height:36px;background:var(--yooza-yellow);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;color:var(--yooza-black)">
-                  ${getInitials(c.nom)}
+                  ${escapeHtml(getInitials(c.nom))}
                 </div>
                 <div style="flex:1;min-width:0">
-                  <div style="font-weight:600;font-size:0.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.nom}</div>
-                  <div style="font-size:0.75rem;color:var(--yooza-gray)">${formatDate(c.dateFinIntervention)}</div>
+                  <div style="font-weight:600;font-size:0.875rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(c.nom)}</div>
+                  <div style="font-size:0.75rem;color:var(--yooza-gray)">${escapeHtml(formatDate(c.dateFinIntervention))}</div>
                 </div>
                 <button class="btn btn-primary btn-sm"
-                  onclick="event.stopPropagation();quickSend(${c.id})"
+                  onclick="event.stopPropagation();quickSend(${safeClientId(c.id)})"
                   title="Marquer comme envoyé">
                   Envoyer
                 </button>
@@ -189,20 +189,20 @@ function quickSend(clientId) {
     `
       <div class="alert alert-info" style="margin-bottom:1rem">
         <span>ℹ️</span>
-        <span>Canal prévu : <strong>${canalLabel}</strong> — ${canal === 'email' ? client.email : client.telephone}</span>
+        <span>Canal prévu : <strong>${escapeHtml(canalLabel)}</strong> — ${escapeHtml(canal === 'email' ? client.email : client.telephone)}</span>
       </div>
       <div class="form-group">
         <label class="form-label">Client</label>
-        <div style="font-weight:600">${client.nom} — ${client.entreprise}</div>
+        <div style="font-weight:600">${escapeHtml(client.nom)} — ${escapeHtml(client.entreprise)}</div>
       </div>
       <div class="form-group" style="margin-bottom:0">
         <label class="form-label">Message qui sera envoyé</label>
-        <div class="message-preview">${message}</div>
+        <div class="message-preview">${escapeHtml(message)}</div>
       </div>
     `,
     `
       <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="confirmSend(${clientId})">
+      <button class="btn btn-primary" onclick="confirmSend(${safeClientId(clientId)})">
         ✓ Confirmer l'envoi
       </button>
     `

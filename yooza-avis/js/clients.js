@@ -36,7 +36,7 @@ function renderClients(container) {
           class="search-input"
           id="search-input"
           placeholder="Rechercher un client, une entreprise..."
-          value="${clientsFilter.search}"
+          value="${escapeHtml(clientsFilter.search)}"
           oninput="handleSearch(this.value)"
         >
       </div>
@@ -73,12 +73,13 @@ function renderClientsTable() {
   const search = clientsFilter.search.toLowerCase();
 
   function highlight(text) {
-    if (!search) return text;
-    const idx = text.toLowerCase().indexOf(search);
-    if (idx === -1) return text;
-    return text.substring(0, idx)
-      + `<mark class="highlight">${text.substring(idx, idx + search.length)}</mark>`
-      + text.substring(idx + search.length);
+    const rawText = String(text);
+    if (!search) return escapeHtml(rawText);
+    const idx = rawText.toLowerCase().indexOf(search);
+    if (idx === -1) return escapeHtml(rawText);
+    return escapeHtml(rawText.substring(0, idx))
+      + `<mark class="highlight">${escapeHtml(rawText.substring(idx, idx + search.length))}</mark>`
+      + escapeHtml(rawText.substring(idx + search.length));
   }
 
   return `
@@ -102,11 +103,11 @@ function renderClientsTable() {
         </thead>
         <tbody>
           ${filtered.map(c => `
-            <tr onclick="navigate('#/client/${c.id}')">
+            <tr onclick="navigate('#/client/${safeClientId(c.id)}')">
               <td>
                 <div style="display:flex;align-items:center;gap:0.75rem">
                   <div style="width:34px;height:34px;background:var(--yooza-yellow);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;flex-shrink:0;color:var(--yooza-black)">
-                    ${getInitials(c.nom)}
+                    ${escapeHtml(getInitials(c.nom))}
                   </div>
                   <div>
                     <div class="client-name">${highlight(c.nom)}</div>
@@ -115,14 +116,14 @@ function renderClientsTable() {
                 </div>
               </td>
               <td>
-                <div class="text-sm">${c.telephone}</div>
-                <div class="text-xs text-muted">${c.email}</div>
+                <div class="text-sm">${escapeHtml(c.telephone)}</div>
+                <div class="text-xs text-muted">${escapeHtml(c.email)}</div>
               </td>
-              <td class="text-sm text-muted">${c.typeIntervention}</td>
-              <td class="text-sm text-muted">${formatDate(c.dateFinIntervention)}</td>
+              <td class="text-sm text-muted">${escapeHtml(c.typeIntervention)}</td>
+              <td class="text-sm text-muted">${escapeHtml(formatDate(c.dateFinIntervention))}</td>
               <td>
                 <span class="badge ${STATUS_BADGE_CLASS[c.statut]}">
-                  ${STATUS_LABELS[c.statut]}
+                  ${escapeHtml(STATUS_LABELS[c.statut])}
                 </span>
               </td>
               <td>
@@ -131,13 +132,13 @@ function renderClientsTable() {
               <td>
                 ${c.statut === STATUS.TO_SEND ? `
                   <button class="btn btn-primary btn-sm"
-                    onclick="event.stopPropagation();quickSend(${c.id})"
+                    onclick="event.stopPropagation();quickSend(${safeClientId(c.id)})"
                     title="Envoyer une demande d'avis">
                     Envoyer
                   </button>
                 ` : `
                   <button class="btn btn-ghost btn-sm"
-                    onclick="event.stopPropagation();navigate('#/client/${c.id}')">
+                    onclick="event.stopPropagation();navigate('#/client/${safeClientId(c.id)}')">
                     Voir →
                   </button>
                 `}
@@ -190,7 +191,7 @@ function exportCSV() {
   ]);
 
   const csv = [headers, ...rows]
-    .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(';'))
+    .map(row => row.map(cell => `"${sanitizeCsvValue(cell).replace(/"/g, '""')}"`).join(';'))
     .join('\n');
 
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -201,4 +202,9 @@ function exportCSV() {
   a.click();
   URL.revokeObjectURL(url);
   showToast('Export CSV téléchargé !', 'success');
+}
+
+function sanitizeCsvValue(value) {
+  const text = String(value === null || value === undefined ? '' : value);
+  return /^\s*[=+\-@]/.test(text) ? "'" + text : text;
 }

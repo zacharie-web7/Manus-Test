@@ -52,38 +52,38 @@ function renderClientDetail(container, clientId) {
     <div class="breadcrumb">
       <span class="breadcrumb-item" onclick="navigate('#/clients')">Clients</span>
       <span class="breadcrumb-sep">›</span>
-      <span class="breadcrumb-current">${client.nom}</span>
+      <span class="breadcrumb-current">${escapeHtml(client.nom)}</span>
     </div>
 
     <!-- En-tête fiche -->
     <div class="client-detail-header">
-      <div class="client-avatar-lg">${getInitials(client.nom)}</div>
+      <div class="client-avatar-lg">${escapeHtml(getInitials(client.nom))}</div>
       <div class="client-detail-info">
         <div class="section-label">Fiche client</div>
-        <div class="client-detail-name">${client.nom}</div>
-        <div class="client-detail-company">${client.entreprise}</div>
+        <div class="client-detail-name">${escapeHtml(client.nom)}</div>
+        <div class="client-detail-company">${escapeHtml(client.entreprise)}</div>
         <div style="margin-top:0.75rem">
           <span class="badge ${STATUS_BADGE_CLASS[client.statut]}" style="font-size:0.8rem;padding:4px 12px">
-            ${STATUS_LABELS[client.statut]}
+            ${escapeHtml(STATUS_LABELS[client.statut])}
           </span>
         </div>
       </div>
       <div class="client-detail-actions">
         ${client.statut === STATUS.TO_SEND ? `
-          <button class="btn btn-primary" onclick="openSendModal(${client.id})">
+          <button class="btn btn-primary" onclick="openSendModal(${safeClientId(client.id)})">
             📤 Envoyer une demande d'avis
           </button>
         ` : client.statut === STATUS.SENT ? `
-          <button class="btn btn-outline" onclick="markAsReceived(${client.id})">
+          <button class="btn btn-outline" onclick="markAsReceived(${safeClientId(client.id)})">
             ✓ Marquer avis reçu
           </button>
-          <button class="btn btn-ghost" onclick="openSendModal(${client.id})">
+          <button class="btn btn-ghost" onclick="openSendModal(${safeClientId(client.id)})">
             ↺ Renvoyer
           </button>
         ` : `
           <div style="display:flex;align-items:center;gap:0.5rem;font-weight:700;color:var(--yooza-black)">
             ${renderStars(client.noteGoogle)}
-            <span>${client.noteGoogle}/5</span>
+            <span>${escapeHtml(client.noteGoogle)}/5</span>
           </div>
         `}
       </div>
@@ -101,7 +101,7 @@ function renderClientDetail(container, clientId) {
               </div>
               <div class="timeline-label">
                 ${step.label}
-                ${step.date ? `<br><span style="font-weight:400;color:var(--yooza-gray)">${formatDate(step.date)}</span>` : ''}
+                ${step.date ? `<br><span style="font-weight:400;color:var(--yooza-gray)">${escapeHtml(formatDate(step.date))}</span>` : ''}
               </div>
             </div>
           `).join('')}
@@ -110,7 +110,7 @@ function renderClientDetail(container, clientId) {
     </div>
 
     <!-- Informations en deux colonnes -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+    <div class="client-detail-grid" style="margin-bottom:1.5rem">
 
       <!-- Informations client -->
       <div class="card">
@@ -122,22 +122,22 @@ function renderClientDetail(container, clientId) {
             <div class="info-item">
               <div class="info-item-label">Téléphone</div>
               <div class="info-item-value">
-                <a href="tel:${client.telephone}" style="color:var(--yooza-black)">${client.telephone}</a>
+                <a href="tel:${encodeURIComponent(String(client.telephone || ''))}" style="color:var(--yooza-black)">${escapeHtml(client.telephone)}</a>
               </div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Email</div>
               <div class="info-item-value">
-                <a href="mailto:${client.email}" style="color:var(--yooza-black);word-break:break-all">${client.email}</a>
+                <a href="mailto:${encodeURIComponent(String(client.email || ''))}" style="color:var(--yooza-black);word-break:break-all">${escapeHtml(client.email)}</a>
               </div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Entreprise</div>
-              <div class="info-item-value">${client.entreprise}</div>
+              <div class="info-item-value">${escapeHtml(client.entreprise)}</div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Adresse</div>
-              <div class="info-item-value">${client.adresse}</div>
+              <div class="info-item-value">${escapeHtml(client.adresse)}</div>
             </div>
           </div>
         </div>
@@ -152,30 +152,30 @@ function renderClientDetail(container, clientId) {
           <div class="info-grid">
             <div class="info-item">
               <div class="info-item-label">Type</div>
-              <div class="info-item-value">${client.typeIntervention}</div>
+              <div class="info-item-value">${escapeHtml(client.typeIntervention)}</div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Date de fin</div>
-              <div class="info-item-value">${formatDate(client.dateFinIntervention)}</div>
+              <div class="info-item-value">${escapeHtml(formatDate(client.dateFinIntervention))}</div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Technicien</div>
-              <div class="info-item-value">${client.technicien}</div>
+              <div class="info-item-value">${escapeHtml(client.technicien)}</div>
             </div>
             <div class="info-item">
               <div class="info-item-label">Canal prévu</div>
-              <div class="info-item-value">${canalLabel} — ${canalContact}</div>
+              <div class="info-item-value">${escapeHtml(canalLabel)} — ${escapeHtml(canalContact)}</div>
             </div>
             ${client.dateEnvoi ? `
               <div class="info-item">
                 <div class="info-item-label">Demande envoyée le</div>
-                <div class="info-item-value">${formatDate(client.dateEnvoi)}</div>
+                <div class="info-item-value">${escapeHtml(formatDate(client.dateEnvoi))}</div>
               </div>
             ` : ''}
             ${client.dateAvis ? `
               <div class="info-item">
                 <div class="info-item-label">Avis reçu le</div>
-                <div class="info-item-value">${formatDate(client.dateAvis)}</div>
+                <div class="info-item-value">${escapeHtml(formatDate(client.dateAvis))}</div>
               </div>
             ` : ''}
           </div>
@@ -184,7 +184,7 @@ function renderClientDetail(container, clientId) {
     </div>
 
     <!-- Notes et message -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+    <div class="client-detail-grid">
 
       <!-- Notes internes -->
       <div class="card">
@@ -193,7 +193,7 @@ function renderClientDetail(container, clientId) {
         </div>
         <div class="card-body">
           <p style="font-size:0.875rem;color:var(--yooza-black);line-height:1.7">
-            ${client.notes || '<span style="color:var(--yooza-gray)">Aucune note.</span>'}
+            ${client.notes ? escapeHtml(client.notes) : '<span style="color:var(--yooza-gray)">Aucune note.</span>'}
           </p>
         </div>
       </div>
@@ -203,13 +203,13 @@ function renderClientDetail(container, clientId) {
         <div class="card-header">
           <div class="card-title">Message prévu</div>
           <span style="font-size:0.75rem;color:var(--yooza-gray);background:var(--yooza-cream);padding:3px 10px;border-radius:var(--radius-full);font-weight:600">
-            ${canalLabel}
+            ${escapeHtml(canalLabel)}
           </span>
         </div>
         <div class="card-body">
-          <div class="message-preview">${message}</div>
+          <div class="message-preview">${escapeHtml(message)}</div>
           ${client.statut === STATUS.TO_SEND ? `
-            <button class="btn btn-primary w-full mt-4" onclick="openSendModal(${client.id})">
+            <button class="btn btn-primary w-full mt-4" onclick="openSendModal(${safeClientId(client.id)})">
               📤 Envoyer cette demande d'avis
             </button>
           ` : ''}
@@ -236,13 +236,13 @@ function openSendModal(clientId) {
       <div class="alert alert-info">
         <span>📋</span>
         <div>
-          <strong>${client.nom}</strong> — ${client.entreprise}<br>
-          <span style="font-size:0.8rem">Canal : <strong>${canalLabel}</strong> · ${canal === 'email' ? client.email : client.telephone}</span>
+          <strong>${escapeHtml(client.nom)}</strong> — ${escapeHtml(client.entreprise)}<br>
+          <span style="font-size:0.8rem">Canal : <strong>${escapeHtml(canalLabel)}</strong> · ${escapeHtml(canal === 'email' ? client.email : client.telephone)}</span>
         </div>
       </div>
       <div class="form-group" style="margin-bottom:0">
         <label class="form-label">Message qui sera envoyé</label>
-        <div class="message-preview">${message}</div>
+        <div class="message-preview">${escapeHtml(message)}</div>
       </div>
       <div class="alert alert-warning" style="margin-top:1rem;margin-bottom:0">
         <span>⚠️</span>
@@ -251,7 +251,7 @@ function openSendModal(clientId) {
     `,
     `
       <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="confirmSendFromDetail(${clientId})">
+      <button class="btn btn-primary" onclick="confirmSendFromDetail(${safeClientId(clientId)})">
         ✓ Confirmer l'envoi
       </button>
     `
@@ -284,7 +284,7 @@ function markAsReceived(clientId) {
     'Avis reçu',
     `
       <p style="margin-bottom:1.25rem;font-size:0.9rem;color:var(--yooza-gray)">
-        Indiquez la note Google laissée par <strong>${client.nom}</strong>.
+        Indiquez la note Google laissée par <strong>${escapeHtml(client.nom)}</strong>.
       </p>
       <div class="form-group" style="margin-bottom:0">
         <label class="form-label">Note Google (1 à 5 étoiles)</label>
@@ -304,7 +304,7 @@ function markAsReceived(clientId) {
     `,
     `
       <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary" onclick="confirmReceived(${clientId})">
+      <button class="btn btn-primary" onclick="confirmReceived(${safeClientId(clientId)})">
         ✓ Enregistrer l'avis
       </button>
     `
