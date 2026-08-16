@@ -61,6 +61,12 @@ npm start
 - `npm run test:backend` : teste `/health` et la réponse 404 sur un serveur HTTP local éphémère.
 - `npm test` : exécute les tests V1 puis les tests backend.
 
+## Intégration continue
+
+Le workflow `.github/workflows/ci.yml` s'exécute pour chaque pull request vers `main`, chaque push sur `main` et sur demande manuelle. Sous Node 22.18.0 et Node 24, il installe les dépendances depuis le lockfile, puis lance les tests V1 et backend, le typecheck et le build.
+
+Une pull request ne devrait pas être fusionnée si l'un des contrôles CI échoue.
+
 ## Lancer la V1 indépendamment
 
 La V1 ne dépend pas du backend. Depuis la racine :
