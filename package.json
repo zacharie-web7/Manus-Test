@@ -1,32 +1,15 @@
 {
-  "name": "yooza-avis",
-  "version": "2.0.0",
+  "name": "yooza-os",
+  "version": "1.0.0",
   "private": true,
-  "description": "Yooza Avis V1 frontend and V2 backend foundation",
-  "type": "module",
+  "description": "Frontend public et PWA du module Yooza Avis",
   "engines": {
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "node --env-file-if-exists=.env --watch server/src/server.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node --env-file-if-exists=.env dist/server.js",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test:v1": "node --test \"tests/*.test.cjs\"",
-    "test:backend": "node --test tests/backend.test.mjs tests/data-model.test.mjs",
-    "test:model": "node --test tests/data-model.test.mjs",
-    "db:generate": "drizzle-kit generate",
-    "db:check": "drizzle-kit check",
-    "test": "npm run test:v1 && npm run test:backend"
-  },
-  "dependencies": {
-    "drizzle-orm": "^0.45.2",
-    "express": "^5.2.1"
-  },
-  "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/node": "^22.20.1",
-    "drizzle-kit": "^0.31.10",
-    "typescript": "^7.0.2"
+    "test": "node --test \"tests/*.test.cjs\"",
+    "check:syntax": "node --check yooza-avis/js/app.js && node --check yooza-avis/js/client-detail.js && node --check yooza-avis/js/clients.js && node --check yooza-avis/js/dashboard.js && node --check yooza-avis/js/data.js && node --check yooza-avis/js/settings.js",
+    "test:frontend": "npm test",
+    "test:v1": "npm test"
   }
 }
