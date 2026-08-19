@@ -13,15 +13,20 @@
     "start": "node --env-file-if-exists=.env dist/server.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:v1": "node --test \"tests/*.test.cjs\"",
-    "test:backend": "node --test tests/backend.test.mjs",
+    "test:backend": "node --test tests/backend.test.mjs tests/data-model.test.mjs",
+    "test:model": "node --test tests/data-model.test.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:check": "drizzle-kit check",
     "test": "npm run test:v1 && npm run test:backend"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^22.20.1",
+    "drizzle-kit": "^0.31.10",
     "typescript": "^7.0.2"
   }
 }
